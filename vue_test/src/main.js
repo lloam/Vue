@@ -17,6 +17,8 @@ Vue.config.productionTip = false
     需要使用render函数接收到的createElement函数去指定具体内容。
 */
 
+let person = {name:'tom',age:18}
+
 // 创建 Vue 实例对象 --- vm
 new Vue({
   // 将 App 组件放入容器中
