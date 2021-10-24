@@ -1,123 +1,48 @@
 <template>
-  <div id="root">
-    <div class="todo-container">
-      <div class="todo-wrap">
-        <MyHeader :addTodo="addTodo" />
-        <MyList
-          :todos="todos"
-          :checkTodo="checkTodo"
-          :deleteTodo="deleteTodo"
-        />
-        <MyFooter
-          :todos="todos"
-          :checkAllTodo="checkAllTodo"
-          :clearAllTodo="clearAllTodo"
-        />
-      </div>
-    </div>
+  <div class="app">
+    <h1>{{ msg }}</h1>
+    <!-- 通过父组件给子组件传递函数类型的props实现：子给父传递数据 -->
+    <School :getSchoolName="getSchoolName" />
+    <!-- 通过父组件给子组件绑定一个自定义事件实现：子给父传递数据（第一种写法：使用@或v-on） -->
+    <Student @lloam="getStudentName" />
+
+    <!-- 通过父组件给子组件绑定一个自定义事件实现：子给父传递数据（第二种写法：使用ref） -->
+    <!-- <Student ref="student" /> -->
   </div>
 </template>
 
 <script>
 // 引入 School 组件
-import MyHeader from './components/MyHeader.vue'
-import MyList from './components/MyList.vue'
-import MyFooter from './components/MyFooter.vue'
+import Student from './components/Student.vue'
+import School from './components/School.vue'
 export default {
   name: 'App',
   components: {
-    MyHeader,
-    MyList,
-    MyFooter,
+    Student,
+    School,
   },
   data() {
     return {
-      todos: JSON.parse(localStorage.getItem('todos')) || [],
+      msg: '你好啊！',
     }
   },
   methods: {
-    // 添加一个 头都
-    addTodo(todoObj) {
-      this.todos.unshift(todoObj)
+    getSchoolName(name) {
+      console.log('App 收到了学校名：', name)
     },
-    // 勾选or取消勾选一个 todo
-    checkTodo(id) {
-      this.todos.forEach((todo) => {
-        if (todo.id === id) todo.done = !todo.done
-      })
-    },
-    // 删除一个 todo
-    deleteTodo(id) {
-      this.todos = this.todos.filter((todo) => {
-        return todo.id !== id
-      })
-    },
-    // 全选or取消全选
-    checkAllTodo(done) {
-      this.todos.forEach((todo) => {
-        todo.done = done
-      })
-    },
-    // 清除所有已经完成的todo
-    clearAllTodo() {
-      this.todos = this.todos.filter((todo) => {
-        return !todo.done
-      })
+    getStudentName(name, ...params) {
+      console.log('App 收到了学生名：', name, params)
     },
   },
-  watch: {
-    todos: {
-      // 深度监视，勾选修改了 todo 对象里面的属性，简单的监视检测不到
-      deep: true,
-      handler(value) {
-        localStorage.setItem('todos', JSON.stringify(value))
-      },
-    },
+  mounted() {
+    // this.$refs.student.$on('lloam', this.getStudentName)   // 绑定自定义事件
+    // this.$refs.student.$once('lloam', this.getStudentName) // 绑定自定义事件（一次性）
   },
 }
 </script>
 <style>
-/*base*/
-body {
-  background: #fff;
-}
-
-.btn {
-  display: inline-block;
-  padding: 4px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 1px 2px rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-}
-
-.btn-danger {
-  color: #fff;
-  background-color: #da4f49;
-  border: 1px solid #bd362f;
-}
-
-.btn-danger:hover {
-  color: #fff;
-  background-color: #bd362f;
-}
-
-.btn:focus {
-  outline: none;
-}
-
-.todo-container {
-  width: 600px;
-  margin: 0 auto;
-}
-.todo-container .todo-wrap {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+.app {
+  background-color: gray;
+  padding: 5px;
 }
 </style>
