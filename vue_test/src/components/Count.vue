@@ -8,15 +8,15 @@
       <option value="2">2</option>
       <option value="3">3</option>
     </select>
-    <button @click="increment">+</button>
-    <button @click="decrement">-</button>
-    <button @click="incrementOdd">当前求和为奇数再加</button>
-    <button @click="incrementWait">等一等再加</button>
+    <button @click="increment(n)">+</button>
+    <button @click="decrement(n)">-</button>
+    <button @click="incrementOdd(n)">当前求和为奇数再加</button>
+    <button @click="incrementWait(n)">等一等再加</button>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'Count',
   data() {
@@ -25,16 +25,6 @@ export default {
     }
   },
   computed: {
-    // 靠程序员自己亲自去写计算属性
-    /*     sum() {
-      return this.$store.state.sum
-    },
-    school() {
-      return this.$store.state.school
-    },
-    subject() {
-      return this.$store.state.subject
-    }, */
     // 借助 mapState 生成计算属性，从 state 中读取数据（对象写法）
     /* ...mapState({
       sum: 'sum',
@@ -44,37 +34,45 @@ export default {
     // 借助 mapState 生成计算属性，从 state 中读取数据（数组写法）
     ...mapState(['sum', 'school', 'subject']),
     /****************************** */
-    /* bigSum() {
-      return this.$store.getters.bigSum
-    }, */
-
     // 借助 mapGetters 生成计算属性，从 state 中读取数据（对象写法）
     // ...mapGetters({ bigSum: 'bigSum' }),
     // 借助 mapGetters 生成计算属性，从 state 中读取数据（数组写法）
     ...mapGetters(['bigSum']),
   },
   methods: {
-    increment() {
+    /* increment() {
       this.$store.commit('JIA', this.n)
     },
     decrement() {
       this.$store.commit('JIAN', this.n)
-    },
-    incrementOdd() {
+    }, */
+
+    // 借助 mapMutations 生成对应的方法，方法中会调用 commit 去联系 mutations（对象写法）
+    ...mapMutations({ increment: 'JIA', decrement: 'JIAN' }),
+
+    // 借助 mapMutations 生成对应的方法，方法中会调用 commit 去联系 mutations（数组写法）
+    // ...mapMutations(['JIA',['JIAN']]),
+
+    /************************* */
+    /* incrementOdd() {
       this.$store.dispatch('jiaOdd', this.n)
     },
     incrementWait() {
       this.$store.dispatch('jiaWait', this.n)
-    },
+    }, */
+    // 借助 mapActions 生成对应的方法，方法中会调用 dispatch 去联系 actions（对象写法）
+    ...mapActions({ incrementOdd: 'jiaOdd', incrementWait: 'jiaWait' }),
+    // 借助 mapActions 生成对应的方法，方法中会调用 dispatch 去联系 actions（数组写法）
+    // ...mapActions(['jiaOdd','jiaWait']),
   },
   mounted() {
-    const x = mapState({
+    /* const x = mapState({
       he: 'sum',
       xuexiao: 'school',
       xueke: 'subject',
       bigSum: 'bigSum',
     })
-    console.log(x)
+    console.log(x) */
   },
 }
 </script>
